@@ -1,0 +1,11 @@
+# MCP 服务依赖
+# 
+# 用途：mcp_server.py，把检索与咨询能力暴露给 Claude Desktop / Cursor / Cline 等 MCP 客户端
+# 不装时：mcp_server.py 无法启动，其他功能不受影响
+#
+# 安装大小：约 20MB
+#
+# 安装：
+#   pip install -r requirements-mcp.txt
+
+mcp>=1.0.0

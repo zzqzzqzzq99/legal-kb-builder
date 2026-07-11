@@ -1,0 +1,28 @@
+# macOS
+.DS_Store
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+
+# Development backups
+.backup_*/
+
+# Runtime artifacts
+eval/results/
+
+# User-local config (copy from .example.yaml)
+assets/parser-backends.yaml
+assets/deploy-backends.yaml
+
+# Model cache
+.cache/
+
+# IDE
+.vscode/
+.idea/
+*.swp
