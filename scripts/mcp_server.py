@@ -103,7 +103,9 @@ def _parse_kb_paths() -> list[Path]:
     else:
         raw = str(Path.cwd() / "legal_kb")
 
-    paths = [Path(p).expanduser().resolve() for p in raw.split(":") if p.strip()]
+    # 用 os.pathsep 分隔（Windows 为 ';'，POSIX 为 ':'）。
+    # 固定用 ':' 会把 "D:\kb" 切成 "D" 和 "\kb"。
+    paths = [Path(p).expanduser().resolve() for p in raw.split(os.pathsep) if p.strip()]
     if not paths:
         sys.stderr.write("❌ 未指定任何知识库路径\n")
         sys.exit(2)
