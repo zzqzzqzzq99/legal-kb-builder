@@ -434,7 +434,8 @@ def _init_kb_paths(args):
 
 def main():
     parser = argparse.ArgumentParser(description="legal-kb-builder HTTP API 服务")
-    parser.add_argument("--host", default="0.0.0.0", help="监听地址（默认 0.0.0.0）")
+    parser.add_argument("--host", default="127.0.0.1",
+                        help="监听地址（默认 127.0.0.1 仅本机；对外提供服务需显式指定 0.0.0.0）")
     parser.add_argument("--port", type=int, default=8000, help="监听端口（默认 8000）")
     parser.add_argument("--qa-kb", help="问答知识库路径")
     parser.add_argument("--case-kb", help="裁判文书知识库路径")
@@ -449,6 +450,16 @@ def main():
 
     print(f"🚀 启动 API 服务: http://{args.host}:{args.port}", file=sys.stderr)
     print(f"   API 文档: http://{args.host}:{args.port}/docs", file=sys.stderr)
+
+    # 本服务未内置任何鉴权，绑定非回环地址即等于向网络公开全部接口
+    if args.host not in ("127.0.0.1", "localhost", "::1"):
+        print(
+            f"⚠️  已绑定 {args.host}：本服务不含鉴权，且 CORS 为 allow_origins=['*']，\n"
+            f"    所有接口（含 /kb/list 路径信息、/sessions 会话列表、"
+            f"DELETE /session/{{id}}）将对可达网络公开。\n"
+            f"    公网部署请在前置反向代理上配置鉴权与来源限制。",
+            file=sys.stderr,
+        )
 
     uvicorn.run(
         "api_server:app",
