@@ -111,11 +111,14 @@ def suggest_search_groups(files: list[dict]) -> list[dict]:
     groups = {}
 
     for f in files:
+        # 在小写副本上匹配：part/chapter 两个模式仅写了小写形式，
+        # 直接对原名匹配会漏掉 "Part 1"/"Chapter 3" 这类大写写法。
+        # 下标在原名上取用，故分组名保留原始大小写。
         name = f["name"].lower()
         # 按编/篇/卷分组
         for pattern in [r'第.编', r'第.篇', r'第.卷', r'第.章',
                         r'part\s*\d', r'chapter\s*\d']:
-            match = re.search(pattern, f["name"])
+            match = re.search(pattern, name)
             if match:
                 prefix = f["name"][:match.start()].strip("_- ")
                 if prefix:
